@@ -7,7 +7,8 @@ import { useState } from 'react';
 
 export const MarvelApp = () => {
   const [page, setPage] = useState(1)
-  const {characters, pag } = useCharacters(page)
+  const [searchMrv, setSearchMrv] = useState('')
+  const { characters, pag } = useCharacters(page, searchMrv)
 
 
   const handlePageChange = (event, value) => {
@@ -15,10 +16,18 @@ export const MarvelApp = () => {
   }
 
 
+  const handleSearch = (term) => {
+    setSearchMrv(term)
+    setPage(1)
+  }
+
   return (
     <>
-          <GridCharacters characters={characters}/>
-          <Pagination className='position-absolute start-50' count={pag} page={page} onChange={handlePageChange} />
+      <div className='container d-flex flex-row justify-content-center align-items-center mt-3 w-50'>
+        <BuscarMarvel handleMarvel={handleSearch} />
+      </div>
+      <GridCharacters characters={characters} />
+      <Pagination className='d-flex justify-content-center mt-4' count={pag} page={page} onChange={handlePageChange} />
 
     </>
   )
