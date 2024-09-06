@@ -3,30 +3,39 @@ import { reqCharacter } from "../service/characters"
 
 
 
-
-export const useCharacters = () => {
+export const useCharacters = (page) => {
     const [characters, setCharacter] = useState()
+    const [pag, setPag] = useState(1)
+
 
     useEffect(() => {
+        const fetchCharacters = async () => {
+            try {
+                const data = await reqCharacter(page)
+                setCharacter(data.results)
+                setPag(Math.ceil(data.total / data.limit))
+            } catch (error) {
+                console.error
+            }
+        }
+        fetchCharacters()
+    }, [page])
 
-        reqCharacter().then((data) => {
-            setCharacter(data.results)
-        })
-    }, [])
 
-    const handleMarvel = async (categoria, e) =>{
+    const [arreglo, setArreglo] = useState([])
+
+    const handleMarvel = async (categoria, e) => {
         e.preventDefault()
         try {
-            const data = await reqCharacter(categoria)
-            setCharacter(data)
+            const data = await reqPoke(categoria)
+            setArreglo(data)
         } catch (error) {
             console.error('Error fetching data:', error)
         }
     }
 
-
-
     return {
-        characters, handleMarvel
+        characters,
+        pag
     }
 }

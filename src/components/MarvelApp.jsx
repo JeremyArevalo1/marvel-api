@@ -2,16 +2,23 @@ import Pagination from '@mui/material/Pagination';
 import { useCharacters } from "../hooks/useCharacters"
 import { GridCharacters } from "./GridCharacters"
 import { BuscarMarvel } from './BucarMarvel';
+import { useState } from 'react';
 
 
 export const MarvelApp = () => {
-  const {handleMarvel} = useCharacters()
-  const {characters} = useCharacters()
+  const [page, setPage] = useState(1)
+  const {characters, pag } = useCharacters(page)
+
+
+  const handlePageChange = (event, value) => {
+    setPage(value)
+  }
+
+
   return (
     <>
-          <BuscarMarvel handleMarvel={handleMarvel}/>
           <GridCharacters characters={characters}/>
-          <Pagination count={10} onChange={(e, value) => console.log(value)}/>
+          <Pagination className='position-absolute start-50' count={pag} page={page} onChange={handlePageChange} />
 
     </>
   )
